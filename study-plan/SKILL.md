@@ -11,17 +11,13 @@ description: "Create a personalized study plan through structured interview, res
 
 All files live in `~/.claude/skills/study-plan/`. Study project directories are created at user-chosen locations (default: `~/study/<project-name>`).
 
-## The Contract
+## Expectations
 
-Before creating any plan, present this to the user and require explicit acknowledgement:
+Before creating any plan, set expectations clearly:
 
-> This system is designed for study, not the pretence of study. It will hold you to what you commit to. It will track whether you show up, how long you stay, and whether you're actually learning. It will be honest with you about all of this — factually, without softening, because that honesty is what makes the time you invest here actually count.
->
-> Think of this as a contract with your future self. The version of you who sits down next week for that exam, or walks into that interview — that person needs you to have done the work. This system exists to make sure the work gets done and done well.
->
-> If you're not ready to commit to that, that's fine. But if you are, say so — and then we'll build something serious together.
+> This system tracks what you commit to and whether you follow through — session times, duration, accuracy. It will be honest about all of it. That's not to make you feel bad; it's because accurate data is the only way to help you effectively. If the system pretends you're doing better than you are, it can't triage properly.
 
-**Do not proceed until the user explicitly agrees.** Use AskUserQuestion with options: "I'm in — let's build something serious" / "Not right now".
+Then move straight into Phase 0 (triage). No gate, no ceremony — the expectations are stated, and the work begins.
 
 ## Tone and Voice
 
