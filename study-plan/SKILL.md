@@ -154,7 +154,7 @@ Tell the user: "I'm writing to `~/.claude/skills/study-plan/references/plans/` s
 
 Walk the user through:
 - How to use `/study-session` to start daily sessions
-- If technical: how to enable learning output mode in Claude Code settings
+- If technical: recommend enabling the Learning output style with `/output-style learning`. This makes Claude ask you to write code yourself during exercises, reinforcing active learning. The study-session skill adds stricter enforcement during exercise solve phases (no code, no hints) on top of this.
 - How the SR system works (cards appear naturally during sessions, rate recall)
 - How exercises work (file with instructions, solve without Claude, then check)
 - Recommend making `/study-session` part of their daily routine

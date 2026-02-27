@@ -12,6 +12,19 @@ ln -sfn ~/dev/studykit/study-plan ~/.claude/skills/study-plan
 ln -sfn ~/dev/studykit/study-session ~/.claude/skills/study-session
 ```
 
+Verify symlinks:
+```bash
+ls -la ~/.claude/skills/study-plan/SKILL.md   # should point to repo
+ls -la ~/.claude/skills/study-session/SKILL.md
+```
+
+**Prerequisites**: Python 3.10+, [uv](https://docs.astral.sh/uv/). For technical mode exercises, you'll also need the runtime for your chosen language (Python comes with uv; for JS/TS install [Bun](https://bun.sh/)).
+
+**Recommended**: Enable the Learning output style for study sessions — it makes Claude ask you to write code yourself during exercises:
+```
+/output-style learning
+```
+
 No external dependencies — all scripts use Python stdlib only (`json`, `datetime`, `pathlib`). Run with `uv run python3`.
 
 ## Usage

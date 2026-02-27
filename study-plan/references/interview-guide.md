@@ -18,6 +18,7 @@ Before project-specific questions, establish who the person is. This only happen
 - "Do you prefer typing or speaking your answers?"
 
 ### Schedule and Environment
+- "What timezone are you in?"
 - "Where do you usually study? Is that environment reliable (quiet, no interruptions, good internet)?"
 - "Do you have a backup study location?"
 - "When are you typically free to study? Morning, afternoon, evening?"
