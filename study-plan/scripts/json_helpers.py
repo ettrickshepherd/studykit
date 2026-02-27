@@ -167,6 +167,15 @@ def append_exercise(exercises_path: str, exercise_data: dict) -> str:
 
     exercise_id = next_id(data["exercises"], "e")
     exercise_data["id"] = exercise_id
+
+    # Interview-specific defaults (null for non-interview exercises)
+    exercise_data.setdefault("pattern", None)
+    exercise_data.setdefault("lc_number", None)
+    exercise_data.setdefault("lc_name", None)
+    exercise_data.setdefault("assessment_type", None)
+    exercise_data.setdefault("timed", False)
+    exercise_data.setdefault("interview_time_budget", None)
+
     data["exercises"].append(exercise_data)
     save_json(exercises_path, data)
     return exercise_id

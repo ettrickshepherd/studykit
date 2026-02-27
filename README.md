@@ -129,7 +129,20 @@ uv run python3 ~/.claude/skills/study-session/scripts/session_summary.py streak 
 
 Uses the **SM-2 algorithm** (Anki's foundation). Cards are reviewed interstitially — woven into natural transition points during sessions, not in a dedicated review block. Quality is assessed from context (0-5 scale), and review uses Claude Code's AskUserQuestion with the notes feature for active recall.
 
-Card types: `recall`, `application`, `comparison`, `synthesis`, `edge_case`.
+Card types: `recall`, `application`, `comparison`, `synthesis`, `edge_case`, `pattern`.
+
+## Interview Prep
+
+When the study plan context is interview prep, the system activates interview-specific behavior:
+
+1. **Role research** — asks for company, role, level; launches a background subagent to research the interview process, confirms findings with you
+2. **Technical interviews** — covers algorithmic (LC-style), online assessments, system design, pair programming, take-homes, CS fundamentals
+3. **Oral interviews** — covers behavioral (STAR), case interviews, competency-based, culture fit, presentation
+4. **Pattern-based progression** — for algorithmic prep, problems are grouped by ~15 core patterns (two-pointer, sliding window, BFS/DFS, DP, etc.), not just data structures
+5. **Learning output mode** — during coding exercises, Claude refuses to write code or give hints. You solve it. When you say "done", Claude runs the tests.
+6. **Primitive extraction** — after solving, Claude decomposes the solution into transferable building blocks (the patterns and techniques, not the specific answer) and generates SR cards for those
+
+The system supports curated problem lists (Blind 75, Neetcode 150, Grind 75) or Claude picks based on your level and weak areas — chosen during onboarding.
 
 ## Design Decisions
 

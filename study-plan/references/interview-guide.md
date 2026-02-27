@@ -104,6 +104,55 @@ The confirmed profile feeds into Phase 2 (Research) and Phase 3 (Plan Constructi
 
 ---
 
+## Interview Prep — Role Research
+
+**Activates when Round 1 context = "Interview prep".** Read the relevant reference files:
+- Technical / coding → read `~/.claude/skills/study-plan/references/technical-interview.md`
+- Oral / behavioral → read `~/.claude/skills/study-plan/references/oral-interview.md`
+- Both → read both
+
+### What kind of interview?
+
+Use AskUserQuestion (multiSelect: true):
+- "What aspects of the interview are you preparing for?"
+  - Technical / coding
+  - Oral / behavioral
+  - Both
+
+### Role identification (all interview types)
+
+- "What company are you interviewing with? (or is this general prep?)"
+- "What's the role title and level? (e.g., 'Senior Backend Engineer', 'L4 SWE')"
+- "Do you know what the interview rounds look like?"
+
+### Background research subagent
+
+After getting company + role + level, launch an Explore subagent **in the background** to research:
+- Interview process for that company/role (rounds, format, typical questions)
+- Company-specific patterns (Amazon = leadership principles, Google = heavy LC, Meta = system design weighted)
+- Difficulty calibration and timeline norms
+- For oral: company values, glassdoor interview reports, known question themes
+- For technical: platform used, difficulty level, focus areas
+
+While the subagent researches, **continue the interview** — don't make the user wait.
+
+When research returns, present findings: "Here's what I found about [Company] [Role] interviews — does this match what you've heard?" Confirm before building the plan.
+
+### For algorithmic prep
+
+- "Which problem list do you want to work from?" (Blind 75 / Neetcode 150 / Grind 75 / Claude picks based on your level / I have my own list)
+- "Which patterns are you already comfortable with?" (present the pattern list from `technical-interview.md`)
+- "Which patterns feel weakest?" (these get prioritised)
+- "Do you want timed practice from day 1, or build up to it?"
+
+### For oral prep
+
+- "Do you have stories/examples ready for behavioral questions, or starting from scratch?"
+- "Any specific competencies you know they test? (leadership, conflict resolution, etc.)"
+- "Do you want to practice out loud (typing responses) or build a story bank first?"
+
+---
+
 ## Quick Mode (Urgent) — Compressed Interview
 
 Single round, all essential questions:

@@ -184,3 +184,127 @@ Easy: Number of Islands → Medium: Course Schedule → Hard: Word Ladder
 Easy: Basic SELECT + WHERE → Medium: JOINs + GROUP BY → Hard: Window Functions + CTEs
 
 Adapt to the specific plan topics and the learner's level. These are starting points, not rigid sequences.
+
+---
+
+## Interview Prep Mode
+
+Activates when project has interview-related tags (e.g., `interview`, `leetcode`, `coding-interview`). Read the relevant reference:
+- Technical → `~/.claude/skills/study-plan/references/technical-interview.md`
+- Oral → `~/.claude/skills/study-plan/references/oral-interview.md`
+
+### Algorithmic Exercises (LC-style)
+
+Based on real LeetCode problems, not generic exercises.
+
+**Exercise file format**:
+```python
+# ============================================================
+# LeetCode 15: 3Sum
+# Pattern: Two Pointer
+# Difficulty: Medium
+# Interview time budget: 25-35 min
+# ============================================================
+#
+# Given an integer array nums, return all the triplets
+# [nums[i], nums[j], nums[k]] such that i != j, i != k,
+# and j != k, and nums[i] + nums[j] + nums[k] == 0.
+#
+# Notice that the solution set must not contain duplicate
+# triplets.
+#
+# Constraints:
+# - 3 <= nums.length <= 3000
+# - -10^5 <= nums[i] <= 10^5
+#
+# Example 1:
+#   Input: nums = [-1,0,1,2,-1,-4]
+#   Output: [[-1,-1,2],[-1,0,1]]
+#
+# Example 2:
+#   Input: nums = [0,1,1]
+#   Output: []
+# ============================================================
+
+from datetime import datetime
+_start = datetime.now()
+
+
+def three_sum(nums: list[int]) -> list[list[int]]:
+    """Your solution here."""
+    pass
+
+
+# ============================================================
+# Tests
+# ============================================================
+
+def test():
+    _elapsed = (datetime.now() - _start).total_seconds() / 60
+    print(f"Time: {_elapsed:.1f} min")
+
+    result = three_sum([-1, 0, 1, 2, -1, -4])
+    assert sorted([sorted(x) for x in result]) == [[-1, -1, 2], [-1, 0, 1]], f"Basic: {result}"
+
+    assert three_sum([0, 1, 1]) == [], "No triplets"
+    assert three_sum([0, 0, 0]) == [[0, 0, 0]], "All zeros"
+    assert three_sum([1, -1, -1, 0]) == [[-1, 0, 1]], "Duplicates"
+
+    print(f"All tests passed in {_elapsed:.1f} min")
+
+
+if __name__ == "__main__":
+    test()
+```
+
+Note the timing built into the file — elapsed time is shown when tests run.
+
+**The solve phase — learning output mode**:
+
+1. After generating the exercise file, Claude enters learning output mode
+2. **Claude REFUSES to write any code, give solutions, or offer hints.** No "here's how I'd approach it", no code suggestions, no completions. The user solves it themselves.
+3. Claude may ONLY answer clarifying questions about the **problem statement** (not the solution). "What does 'duplicate triplets' mean?" is fine. "Should I use two pointers?" is not — Claude responds: "Work through that yourself."
+4. This is the core discipline. If Claude writes the code, the user hasn't learned anything.
+5. When the user says "done" / "run it" / equivalent, Claude runs the file.
+6. Learning mode deactivates — Claude can now discuss the solution freely.
+
+**After solving — primitive extraction**:
+
+1. Identify the pattern(s) used (reference `technical-interview.md` pattern taxonomy)
+2. List 2-5 solution primitives — the transferable building blocks
+3. Generate SR cards for the primitives (not the specific problem)
+4. Tag cards with both the pattern and the LC problem that surfaced them
+5. Evaluate: correctness, approach, time vs interview budget, code quality
+6. "You solved LC 15 (3Sum) in 18 min. Interview budget is 25-35 min. Solid pace."
+
+**Exercise tracking** — log with interview-specific fields:
+```bash
+uv run python3 ~/.claude/skills/study-plan/scripts/json_helpers.py add-exercise <project>/data/exercises.json '{
+  "topic": "arrays",
+  "subtopic": "two-pointer",
+  "pattern": "two-pointer",
+  "lc_number": 15,
+  "lc_name": "3Sum",
+  "difficulty": "medium",
+  "assessment_type": "algorithmic",
+  "timed": true,
+  "interview_time_budget": 30,
+  ...
+}'
+```
+
+### System Design Exercises
+
+1. Claude presents a design scenario ("Design a URL shortener", "Design Twitter's feed")
+2. User describes their design (typed — components, data flow, trade-offs)
+3. Claude evaluates: requirements gathering, component choices, scalability, trade-offs
+4. Primitive extraction → SR cards for design building blocks
+5. No learning output mode needed — this is collaborative discussion
+
+### Behavioral / Oral Exercises
+
+1. Claude presents a behavioral question themed to target competency
+2. User types their STAR response
+3. Claude evaluates: structure, specificity, impact, length, ownership
+4. SR cards for: question patterns, which story maps to which competency
+5. Feedback is direct: "Your situation was too long. The action was strong but you didn't quantify the result."

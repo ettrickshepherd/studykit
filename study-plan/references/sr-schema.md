@@ -60,6 +60,7 @@
 - `comparison` — "How does [A] differ from [B]?"
 - `synthesis` — "Explain how [concept A] relates to [concept B] and why it matters for [context]"
 - `edge_case` — "What happens when [unusual condition]?"
+- `pattern` — "When you see [problem signals], consider [pattern]. Key primitive: [technique]."
 
 ### sessions.json
 
@@ -93,6 +94,12 @@
       "id": "e001",
       "topic": "arrays",
       "subtopic": "two-pointer",
+      "pattern": null,
+      "lc_number": null,
+      "lc_name": null,
+      "assessment_type": null,
+      "timed": false,
+      "interview_time_budget": null,
       "difficulty": "easy",
       "description": "Two Sum - find indices that sum to target",
       "file_path": "exercises/arrays/two-sum.py",
@@ -106,6 +113,17 @@
     }
   ]
 }
+```
+
+**Interview-specific exercise fields** (all optional, null for non-interview exercises):
+| Field | Type | Description |
+|-------|------|-------------|
+| pattern | string\|null | Algorithmic pattern (two-pointer, bfs, dp, etc.) |
+| lc_number | int\|null | LeetCode problem number |
+| lc_name | string\|null | LeetCode problem name |
+| assessment_type | string\|null | "algorithmic", "system-design", "behavioral", "case", "competency" |
+| timed | bool | Whether timing was enforced |
+| interview_time_budget | int\|null | Minutes allowed in a real interview |
 ```
 
 ### topics.json
