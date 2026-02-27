@@ -1,6 +1,6 @@
 # Interview Guide
 
-Structured interview questions for study plan creation. Number of rounds scales with urgency (Phase 0 triage).
+Structured questions for study plan creation. Phase 0 handles classification, identification, and timeline. This guide covers first-use onboarding and the remaining steps.
 
 ## First-Use Onboarding (only when no user-profile.md exists)
 
@@ -31,23 +31,11 @@ Write responses to `~/.claude/skills/study-plan/references/user-profile.md` usin
 
 ---
 
-## Project-Specific Interview Rounds
+## Core Questions
 
-### Round 1 — Who and What (all urgency levels)
+Phase 0 has already established: what they're preparing for, target identified (company/role or exam name), background research agent launched, timeline known, urgency derived.
 
-Use AskUserQuestion for each:
-
-1. "What are you trying to learn?" (free text — let them describe in their own words)
-2. "What's the context?" — Options:
-   - Interview prep
-   - Exam / certification
-   - Professional development
-   - Personal interest
-   - Other
-3. "What's your timeline?" — Get a specific date or "open-ended"
-4. "How many hours per day can you realistically commit?" — Emphasise *realistically*
-
-### Round 2 — Current State (standard + deep)
+### Step 1 — Current State (all urgency levels)
 
 1. "What's your current skill level in this area?" — Options:
    - Beginner (little to no experience)
@@ -59,41 +47,70 @@ Use AskUserQuestion for each:
 4. "Do you have any materials already? (books, courses, notes, problem sets)"
 5. "Should we start your first session with a diagnostic assessment to calibrate?"
 
-### Round 3 — Learning Style (standard + deep)
+### Step 2 — Focus (standard + deep, skip for urgent)
 
-Skip if first-use onboarding already covered this. Otherwise:
+Scales with context. By now the background research agent should have results.
 
-1. "How do you learn best?" (same options as onboarding)
-2. "For this specific topic, what study approach appeals to you?"
-3. "Do you learn better in long sessions or short bursts?"
-4. "What keeps you engaged vs. what makes you zone out?"
+**For interview:**
 
-### Round 4 — Schedule and Environment (deep only)
+Present research findings first: "Here's what I found about [Company] [Role] interviews — does this match what you've heard?" Confirm or correct before proceeding.
+
+Then read the relevant reference files:
+- Technical / coding → read `~/.claude/skills/study-plan/references/technical-interview.md`
+- Oral / behavioral → read `~/.claude/skills/study-plan/references/oral-interview.md`
+- Both → read both
+
+AskUserQuestion (multiSelect): "What aspects of the interview are you preparing for?"
+- Technical / coding
+- Oral / behavioral
+
+**For algorithmic prep:**
+- "Which problem list do you want to work from?" (Blind 75 / Neetcode 150 / Grind 75 / Claude picks based on your level / I have my own list)
+- "Which patterns are you already comfortable with?" (present the pattern list from `technical-interview.md`)
+- "Which patterns feel weakest?" (these get prioritised)
+- "Do you want timed practice from day 1, or build up to it?"
+
+**For oral prep:**
+- "Do you have stories/examples ready for behavioral questions, or starting from scratch?"
+- "Any specific competencies you know they test? (leadership, conflict resolution, etc.)"
+- "Do you want to practice out loud (typing responses) or build a story bank first?"
+
+**For exam/cert:**
+
+Present research findings: "Here's what I found about [Exam] — format, topics, weighting..." Confirm or correct.
+
+- Known exam structure, topic weights
+- Past attempts or mock results
+- Which sections are you most/least confident in?
+
+**For other:**
+- Learning style preferences (if not covered in first-use onboarding)
+- Specific goals / depth desired
+- "What does success look like for you?"
+
+### Step 3 — Schedule + Commitment (deep only)
 
 1. "What specific time window works best each day? (e.g., '9-11 AM', 'after dinner')"
 2. "Walk me through your week — is this consistent or does it vary by day?"
-   - Monday: ___
-   - Tuesday: ___
-   - (etc.)
 3. "Where will you study? Is the environment reliable?"
-4. "Do you have backup locations?"
-5. "What typically derails a planned session? (work overruns, social, energy)"
+4. "What typically derails a planned session? (work overruns, social, energy)"
+5. "What's the *actual minimum* you'll do on a bad day? Not the ideal — the floor."
+6. "What days are genuinely unavailable?"
+7. "Are there topics you're tempted to skip? (These often need the most work.)"
 
-### Round 5 — Honest Commitment (deep only)
+---
 
-Frame this carefully — not shaming, realistic triage:
+## Quick Mode (urgent)
 
-1. "What's the *actual minimum* you'll do on a bad day? Not the ideal — the floor."
-2. "What days are genuinely unavailable?"
-3. "Are there topics you're tempted to skip? (These often need the most work.)"
-4. "What does success look like for you — minimum viable vs. ideal?"
-5. "If you look at the last week of your life: how many of those study time slots would you *actually* have used?" — Force honest reflection.
+Step 1 only. Skip Steps 2-3 — start studying. Background research agent results get incorporated into the first session or used to revise the plan after session 1.
+
+For urgent interview/exam: the background agent is still running from Phase 0. If results arrive during Step 1, weave them in. If not, proceed without them — they'll inform the plan revision.
 
 ---
 
 ## Post-Interview Synthesis
 
-After completing all rounds:
+After completing all steps:
 
 1. Synthesise everything into a **Learner Profile** summary
 2. Present it back to the user
@@ -101,66 +118,3 @@ After completing all rounds:
 4. Iterate until they confirm
 
 The confirmed profile feeds into Phase 2 (Research) and Phase 3 (Plan Construction).
-
----
-
-## Interview Prep — Role Research
-
-**Activates when Round 1 context = "Interview prep".** Read the relevant reference files:
-- Technical / coding → read `~/.claude/skills/study-plan/references/technical-interview.md`
-- Oral / behavioral → read `~/.claude/skills/study-plan/references/oral-interview.md`
-- Both → read both
-
-### What kind of interview?
-
-Use AskUserQuestion (multiSelect: true):
-- "What aspects of the interview are you preparing for?"
-  - Technical / coding
-  - Oral / behavioral
-  - Both
-
-### Role identification (all interview types)
-
-- "What company are you interviewing with? (or is this general prep?)"
-- "What's the role title and level? (e.g., 'Senior Backend Engineer', 'L4 SWE')"
-- "Do you know what the interview rounds look like?"
-
-### Background research subagent
-
-After getting company + role + level, launch an Explore subagent **in the background** to research:
-- Interview process for that company/role (rounds, format, typical questions)
-- Company-specific patterns (Amazon = leadership principles, Google = heavy LC, Meta = system design weighted)
-- Difficulty calibration and timeline norms
-- For oral: company values, glassdoor interview reports, known question themes
-- For technical: platform used, difficulty level, focus areas
-
-While the subagent researches, **continue the interview** — don't make the user wait.
-
-When research returns, present findings: "Here's what I found about [Company] [Role] interviews — does this match what you've heard?" Confirm before building the plan.
-
-### For algorithmic prep
-
-- "Which problem list do you want to work from?" (Blind 75 / Neetcode 150 / Grind 75 / Claude picks based on your level / I have my own list)
-- "Which patterns are you already comfortable with?" (present the pattern list from `technical-interview.md`)
-- "Which patterns feel weakest?" (these get prioritised)
-- "Do you want timed practice from day 1, or build up to it?"
-
-### For oral prep
-
-- "Do you have stories/examples ready for behavioral questions, or starting from scratch?"
-- "Any specific competencies you know they test? (leadership, conflict resolution, etc.)"
-- "Do you want to practice out loud (typing responses) or build a story bank first?"
-
----
-
-## Quick Mode (Urgent) — Compressed Interview
-
-Single round, all essential questions:
-
-1. "What topic and what level?"
-2. "What language? (for technical)"
-3. "How many hours do you have today?"
-4. "What's the most important thing to cover?"
-5. "Any materials you have open right now?"
-
-Get answers → skip research → generate lean plan → start studying within 10-15 minutes.

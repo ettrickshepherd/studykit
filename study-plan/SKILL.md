@@ -39,16 +39,39 @@ Then move straight into Phase 0 (triage). No gate, no ceremony — the expectati
 
 ## Workflow
 
-### Phase 0: Triage
+### Phase 0: Classify → Identify → Timeline
 
-Ask this first:
+**Step 1 — Classify.** Ask first:
 
-> "How much time do you have before you need this? If you have a week or more, we should do a proper onboarding — learn about you, research the material, build a real plan. That investment pays back across every session. But if your exam is tomorrow, none of that matters — we should be studying right now. So: when is this?"
+AskUserQuestion: "What are you preparing for?"
+- Interview
+- Exam / certification
+- Something else
 
-Use AskUserQuestion:
-- **"Urgent — days, not weeks"** → Quick mode: compressed single round, no multi-agent research, lean inline plan, get into first exercise within 10-15 min. Still create user-profile.md via background agent. Full onboarding deferred to after first session.
-- **"Soon — 1-3 weeks"** → Standard: 3-round interview, 2 research agents
-- **"I have time — month or more"** → Deep: full 5-round interview, 3 research agents, comprehensive plan
+**Step 2 — Identify + launch research.** Depends on classification:
+
+**Interview:**
+- "Which company? What position?"
+- → **Launch background Explore agent** immediately with company + role to research interview process, rounds, format, typical questions, company-specific patterns.
+- "What's the timeline like here?" (free text — "next week", "6 weeks", etc.)
+
+**Exam / certification:**
+- "Which exam or course?"
+- → **Launch background Explore agent** to research exam format, syllabus, topic weights, pass rates, common pitfalls.
+- "What's the timeline like here?"
+
+**Something else:**
+- Just let them talk. "Tell me what you're trying to learn." No structured questions, no background agent yet.
+- "What's the timeline like here?" / "Is this open-ended?"
+
+**Step 3 — Urgency classification (internal, not shown to user):**
+
+Based on their timeline answer, classify internally:
+- Days away → **urgent** (compressed onboarding, start studying fast)
+- 1-3 weeks → **standard** (full interview, research, proper plan)
+- Month+ → **deep** (comprehensive, diagnostic, full schedule)
+
+This determines how many follow-up questions to ask. The user never sees the urgency categories.
 
 **Key principle: background everything that isn't the user's current task.** The user should never sit idle while the system writes files. Launch background agents for housekeeping; keep the user engaged.
 
@@ -60,9 +83,9 @@ Check if `~/.claude/skills/study-plan/references/user-profile.md` exists.
 - If it does NOT exist: begin with broader onboarding about the person (this happens once), then proceed to project-specific questions.
 - If it DOES exist: read it, greet by name, and ask only project-specific questions.
 
-Use AskUserQuestion in rounds. Number of rounds scales with urgency from Phase 0.
+Phase 0 already established: classification, target identification (company/role or exam), background research agent running, timeline, and urgency level. Phase 1 picks up from Step 2 in the interview guide (Current State), then proceeds through Focus and Schedule steps. Number of steps scales with urgency.
 
-After each round, synthesise and reflect back. After all rounds, present a full **Learner Profile** summary and confirm or revise via AskUserQuestion.
+After completing all steps, present a full **Learner Profile** summary and confirm or revise via AskUserQuestion.
 
 ### Phase 2: Research + Honest Capability Assessment
 
