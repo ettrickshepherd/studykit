@@ -25,7 +25,7 @@ All data mutations go through the shared helper script:
 uv run python3 ~/.claude/skills/study-plan/scripts/json_helpers.py <command> <args>
 ```
 
-Commands: `load`, `due-cards`, `add-card`, `update-card`, `add-session`, `add-exercise`, `stats`, `next-id`, `sm2`
+Commands: `load`, `due-cards`, `add-card`, `update-card`, `add-session`, `add-exercise`, `stats`, `progress`, `next-id`, `sm2`
 
 ## Workflow
 
@@ -36,10 +36,19 @@ Commands: `load`, `due-cards`, `add-card`, `update-card`, `add-session`, `add-ex
 3. If user's invocation includes keywords (e.g., "python", "bar exam"), fuzzy-match against slugs, topics, tags
 4. If multiple active: present ranked list via AskUserQuestion (closest deadline + most recent session first)
 5. If one active: confirm it ("Starting session for 'python-interview-prep'?")
-6. If none or index missing: "No active study plans found. Would you like to create one? Use `/study-plan` to get started."
+6. If index missing or no active plans:
+   a. Check if `_index.json` exists at all. If not: "It looks like no study plans have been created yet."
+   b. AskUserQuestion: "Want to create a study plan now?"
+      - "Yes — let's set one up" → invoke `/study-plan` skill
+      - "I have one already — let me point you to it" → ask for the project directory path, look for `plan.md` + `data/` there, offer to register it in `_index.json`
 7. Load the selected plan's `.md` from `~/.claude/skills/study-plan/references/plans/<slug>.md`
 8. Read frontmatter for `location` field → this is the project directory
 9. Verify project directory exists
+10. If project directory doesn't exist:
+    a. "The project directory for this plan ([path]) doesn't exist. It may have been moved or deleted."
+    b. AskUserQuestion:
+       - "It moved — here's the new path" → update plan frontmatter + `_index.json` with new path
+       - "Start fresh with `/study-plan`" → invoke `/study-plan`
 
 ### Step 2: Session Initialization
 
@@ -66,6 +75,8 @@ Also read from skill directory:
 - If 3+ misses in 2 weeks: "This is the 3rd miss in 2 weeks — should we revisit the schedule?"
 
 **Check timing**: Compare session start time against committed schedule. If consistently late/early, note the pattern.
+
+**Check output style (coding sessions only):** If today's session includes coding exercises (plan mode = `technical` or `mixed`), suggest: "Today includes coding exercises. For the best experience, enable the Learning output style: `/output-style learning`"
 
 **Present Session Brief**:
 - "Day X of Y. You're [on track / behind / ahead]."

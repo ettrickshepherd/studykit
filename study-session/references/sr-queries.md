@@ -36,6 +36,32 @@ Returns:
 }
 ```
 
+### Per-Deck Progress
+
+```bash
+uv run python3 $HELPERS progress <project>/data/cards.json
+```
+
+Returns per-deck breakdown — total, due, mature, struggling, and new cards for each deck:
+```json
+{
+  "arrays": {
+    "total": 18,
+    "due": 5,
+    "mature": 4,
+    "struggling": 1,
+    "new": 6
+  },
+  "dp": {
+    "total": 12,
+    "due": 3,
+    "mature": 0,
+    "struggling": 2,
+    "new": 8
+  }
+}
+```
+
 ### Add a New Card
 
 ```bash

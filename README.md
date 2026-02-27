@@ -1,58 +1,64 @@
 # studykit
 
-Two coordinating [Claude Code skills](https://docs.anthropic.com/en/docs/claude-code/skills) for structured self-study: plan creation and daily sessions with adaptive spaced repetition.
+Two Claude Code skills for structured self-study with adaptive spaced repetition.
+
+## The problem
+
+Self-study breaks down in predictable ways:
+
+- **No structure** — "learn DP this week" isn't a plan. No progression, no checkpoints, no idea what to cut when you're behind.
+- **No retention** — study something Monday, forget it by Friday. No systematic review.
+- **No accountability** — skip a day, then two, then quit. Nobody tracking whether you actually showed up.
+- **For interviews: no strategy** — grinding LC randomly is slow. Every company tests differently. Memorising solutions doesn't transfer.
+- **AI does it for you** — ask Claude for help with an exercise and it writes the whole solution. You haven't learned anything.
+
+## How studykit works
+
+Two skills that coordinate through shared data:
+
+**`/study-plan`** — builds a structured study plan through interview + research.
+Classifies what you're preparing for (interview, exam, or general learning), identifies the target, researches it in the background, then builds a day-by-day schedule with topic progression, SR card integration, diagnostic checkpoints, and triage strategy.
+
+**`/study-session`** — runs daily sessions adapted to where you are.
+Loads your plan, checks what's due, teaches new material, generates exercises, weaves review cards throughout, tracks everything (timing, accuracy, progress), and commits to git.
+
+### What it does differently
+
+| Problem | Solution |
+|---------|----------|
+| Forget what you learned | SM-2 spaced repetition — cards woven into session transitions, not a separate review block |
+| No exercise discipline | Learning output mode — Claude creates exercises but refuses to write code during the solve phase |
+| Generic interview prep | Background research on your specific company/role; pattern-based progression (15 core patterns, not random problems) |
+| Solutions don't transfer | Primitive extraction — after solving, decomposes into transferable building blocks and generates SR cards for those |
+| Skip days, lose track | Missed-day handling, schedule adaptation, honest progress tracking |
+
+### Modes
+
+- **Technical** (coding, algorithms): file-based exercises with test cases, language-aware
+- **Knowledge** (law, history, theory): JSON-backed spaced repetition, interstitial card review
+- **Mixed**: both in one project
 
 ## Installation
 
 ```bash
 git clone git@github.com:ettrickshepherd/studykit.git ~/dev/studykit
 
-# Symlink both skills into Claude Code's skill directory
 ln -sfn ~/dev/studykit/study-plan ~/.claude/skills/study-plan
 ln -sfn ~/dev/studykit/study-session ~/.claude/skills/study-session
 ```
 
-Verify symlinks:
+Verify:
 ```bash
-ls -la ~/.claude/skills/study-plan/SKILL.md   # should point to repo
+ls -la ~/.claude/skills/study-plan/SKILL.md
 ls -la ~/.claude/skills/study-session/SKILL.md
 ```
 
-**Prerequisites**: Python 3.10+, [uv](https://docs.astral.sh/uv/). For technical mode exercises, you'll also need the runtime for your chosen language (Python comes with uv; for JS/TS install [Bun](https://bun.sh/)).
+**Prerequisites**: Python 3.10+, [uv](https://docs.astral.sh/uv/). For coding exercises, you need the runtime for your language (Python comes with uv; JS/TS needs [Bun](https://bun.sh/)).
 
-**Recommended**: Enable the Learning output style for study sessions — it makes Claude ask you to write code yourself during exercises:
+**Recommended** for coding sessions:
 ```
 /output-style learning
 ```
-
-No external dependencies — all scripts use Python stdlib only (`json`, `datetime`, `pathlib`). Run with `uv run python3`.
-
-## Usage
-
-### `/study-plan` — Create a study plan
-
-Invoke in Claude Code. The skill:
-
-1. **Triages urgency** — urgent (days), soon (weeks), or deep (months) determines how much setup to do
-2. **Interviews you** — 1-5 rounds depending on urgency: what you're learning, current level, schedule, learning style, honest commitment
-3. **Researches the topic** — parallel subagents investigate subject matter, pedagogy, and any materials you provide
-4. **Builds a day-by-day plan** — specific time windows, topic progression, rest days, diagnostic checkpoints, triage strategy
-5. **Sets up a project directory** — JSON data files, daily notes, exercise stubs, living schedule
-
-### `/study-session` — Run a daily session
-
-Invoke when you're ready to study. The skill:
-
-1. **Loads your plan** — finds active plans, picks the right one (or asks if you have several)
-2. **Checks where you left off** — reads progress, schedule, yesterday's notes, due SR cards
-3. **Runs the session** — teaches new material, generates exercises, weaves review cards throughout
-4. **Tracks everything** — daily notes (pre/during/after), progress report, schedule adjustments, git commits
-
-## Modes
-
-- **Technical** (coding, algorithms): file-based exercises with test cases, language-aware (Python, JS, Java, Go, SQL, etc.)
-- **Knowledge** (law, history, theory): JSON-backed spaced repetition using SM-2, interstitial card review
-- **Mixed**: both in one project (e.g., data science = coding + statistics theory)
 
 ## Architecture
 
@@ -114,6 +120,7 @@ uv run python3 ~/.claude/skills/study-plan/scripts/json_helpers.py <command> <ar
 | `add-session <sessions.json> '<json>'` | Log a session |
 | `add-exercise <exercises.json> '<json>'` | Log an exercise |
 | `stats <cards.json>` | Card statistics (total, due, mature, accuracy) |
+| `progress <cards.json>` | Per-deck breakdown (total, due, mature, struggling, new) |
 | `sm2 <quality> <ef> <interval> <reps>` | Standalone SM-2 calculation |
 
 ### `init_study_project.py` — Project scaffolding
@@ -137,25 +144,6 @@ uv run python3 ~/.claude/skills/study-session/scripts/sr_review.py summary <card
 uv run python3 ~/.claude/skills/study-session/scripts/session_summary.py brief <project-dir>
 uv run python3 ~/.claude/skills/study-session/scripts/session_summary.py streak <sessions.json>
 ```
-
-## Spaced Repetition
-
-Uses the **SM-2 algorithm** (Anki's foundation). Cards are reviewed interstitially — woven into natural transition points during sessions, not in a dedicated review block. Quality is assessed from context (0-5 scale), and review uses Claude Code's AskUserQuestion with the notes feature for active recall.
-
-Card types: `recall`, `application`, `comparison`, `synthesis`, `edge_case`, `pattern`.
-
-## Interview Prep
-
-When the study plan context is interview prep, the system activates interview-specific behavior:
-
-1. **Role research** — asks for company, role, level; launches a background subagent to research the interview process, confirms findings with you
-2. **Technical interviews** — covers algorithmic (LC-style), online assessments, system design, pair programming, take-homes, CS fundamentals
-3. **Oral interviews** — covers behavioral (STAR), case interviews, competency-based, culture fit, presentation
-4. **Pattern-based progression** — for algorithmic prep, problems are grouped by ~15 core patterns (two-pointer, sliding window, BFS/DFS, DP, etc.), not just data structures
-5. **Learning output mode** — during coding exercises, Claude refuses to write code or give hints. You solve it. When you say "done", Claude runs the tests.
-6. **Primitive extraction** — after solving, Claude decomposes the solution into transferable building blocks (the patterns and techniques, not the specific answer) and generates SR cards for those
-
-The system supports curated problem lists (Blind 75, Neetcode 150, Grind 75) or Claude picks based on your level and weak areas — chosen during onboarding.
 
 ## Design Decisions
 

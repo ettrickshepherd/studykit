@@ -14,6 +14,7 @@ Commands:
     add-session <sessions.json> <json-str>    Append a session record
     add-exercise <exercises.json> <json-str>  Append an exercise record
     stats <cards.json>                Print card statistics
+    progress <cards.json>             Per-deck breakdown (total, due, mature, struggling, new)
     next-id <file> <prefix>           Print next available ID (e.g., c004, s002)
 """
 
@@ -214,6 +215,30 @@ def card_stats(cards_data: dict) -> dict:
     }
 
 
+def card_progress(cards_data: dict) -> dict:
+    """Per-deck breakdown: total, due, mature, struggling, new for each deck."""
+    cards = cards_data.get("cards", [])
+    today_str = date.today().isoformat()
+
+    decks: dict[str, list] = {}
+    for c in cards:
+        deck = c.get("deck", "unknown")
+        decks.setdefault(deck, []).append(c)
+
+    result = {}
+    for deck, deck_cards in sorted(decks.items()):
+        result[deck] = {
+            "total": len(deck_cards),
+            "due": len([c for c in deck_cards if c["next_review"] <= today_str]),
+            "mature": len([c for c in deck_cards
+                           if c["ease_factor"] > 2.5 and c["interval_days"] > 21 and c["repetitions"] >= 3]),
+            "struggling": len([c for c in deck_cards if c["ease_factor"] < 1.5]),
+            "new": len([c for c in deck_cards if c["repetitions"] == 0]),
+        }
+
+    return result
+
+
 # --- CLI interface ---
 
 def main():
@@ -262,6 +287,11 @@ def main():
         data = load_json(sys.argv[2])
         stats = card_stats(data)
         print(json.dumps(stats, indent=2))
+
+    elif cmd == "progress":
+        data = load_json(sys.argv[2])
+        progress = card_progress(data)
+        print(json.dumps(progress, indent=2))
 
     elif cmd == "next-id":
         data = load_json(sys.argv[2])
